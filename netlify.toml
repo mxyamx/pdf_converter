@@ -1,14 +1,8 @@
 [build]
-  publish   = "public"
-  functions = "netlify/functions"
-
-[functions]
-  node_bundler = "esbuild"
-
-[build.environment]
-  NODE_VERSION = "20"
+  publish = "public"
 
 [[redirects]]
   from = "/convert"
-  to   = "/.netlify/functions/convert"
+  to   = "http://YOUR_SERVER_IP:3000/convert"
   status = 200
+  force = true

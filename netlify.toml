@@ -7,3 +7,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/convert"
+  to   = "/.netlify/functions/convert"
+  status = 200

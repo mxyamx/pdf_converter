@@ -13,7 +13,11 @@ form.addEventListener("submit", async (e) => {
   const fd = new FormData();
   fd.append("file", fileEl.files[0]);
 
-  const res = await fetch("/convert", { method: "POST", body: fd }); 
+  const res = await fetch("/.netlify/functions/convert", {
+  method: "POST",
+  body: fd,
+ });
+
   if (!res.ok) {
     let msg = "Erreur";
     try { const err = await res.json(); msg = err.details || err.error || msg; } catch {}

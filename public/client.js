@@ -7,7 +7,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!fileEl.files[0]) return;
 
-  statusEl.textContent = "Conversion…";
+  statusEl.textContent = "Converting…";
   downloadEl.classList.add("hidden");
 
   const fd = new FormData();
@@ -27,5 +27,5 @@ form.addEventListener("submit", async (e) => {
   downloadEl.href = url;
   downloadEl.download = (fileEl.files[0].name.replace(/\.[^.]+$/, "") || "document") + ".pdf";
   downloadEl.classList.remove("hidden");
-  statusEl.textContent = "Terminé";
+  statusEl.textContent = "Done!";
 });

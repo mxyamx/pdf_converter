@@ -1,3 +1,4 @@
+// converters.js
 import fs from "node:fs/promises";
 import path from "node:path";
 import puppeteer from "puppeteer";
@@ -8,7 +9,8 @@ export async function convertImageToPdf(inputPath, outputPath) {
   const dataUrl = await dataUrlFor(inputPath);
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"], 
+    headless: true,                              // ← add this
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
 
@@ -21,24 +23,4 @@ export async function convertImageToPdf(inputPath, outputPath) {
   await page.pdf({ path: outputPath, format: "A4", printBackground: true });
   await browser.close();
   return outputPath;
-}
-
-async function dataUrlFor(inputPath) {
-  const buf = await fs.readFile(inputPath);
-  const ext = path.extname(inputPath).toLowerCase();
-  if (ext === ".heic" || ext === ".heif") {
-    const pngBuf = await heicToPng(buf);
-    return `data:image/png;base64,${pngBuf.toString("base64")}`;
-  }
-  const mime = ext === ".png" ? "image/png" :
-               (ext === ".jpg" || ext === ".jpeg") ? "image/jpeg" :
-               "application/octet-stream";
-  return `data:${mime};base64,${buf.toString("base64")}`;
-}
-
-async function heicToPng(heicBuffer) {
-  const { width, height, data } = await heicDecode({ buffer: heicBuffer });
-  const png = new PNG({ width, height });
-  png.data = Buffer.from(data);
-  return PNG.sync.write(png);
 }

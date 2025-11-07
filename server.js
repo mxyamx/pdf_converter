@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import multer from "multer";
 import path from "node:path";
@@ -14,10 +15,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.set("trust proxy", true);
 
-app.use(cors({
-  origin: true,
-  methods: ["POST", "GET", "OPTIONS"],
-}));
+// keep CORS permissive for your Netlify frontend
+app.use(cors({ origin: true, methods: ["POST", "GET", "OPTIONS"] }));
 
 const uploadsDir = path.join(__dirname, "uploads");
 await fs.mkdir(uploadsDir, { recursive: true });
@@ -43,7 +42,6 @@ app.post("/convert", upload.single("file"), async (req, res) => {
     return res.status(415).json({ error: `Unsupported file type: ${ext}` });
   }
 
-
   const inputPath = `${tempPath}${ext}`;
   await fs.rename(tempPath, inputPath).catch(async () => {
     await fs.copyFile(tempPath, inputPath);
@@ -68,4 +66,5 @@ app.post("/convert", upload.single("file"), async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ API en ligne sur port ${PORT}`));
+// ↓ bind to all interfaces (important for a droplet)
+app.listen(PORT, "0.0.0.0", () => console.log(`✅ API en ligne sur port ${PORT}`));

@@ -3,6 +3,6 @@
 
 [[redirects]]
   from = "/convert"
-  to   = "http://YOUR_SERVER_IP:3000/convert"
+  to   = "http://104.131.36.237:3000/convert"
   status = 200
   force = true
